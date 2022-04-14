@@ -3,3 +3,4 @@ numpy
 datetime
 streamlit
 streamlit-aggrid
+openpyxl
