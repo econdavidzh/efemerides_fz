@@ -39,7 +39,7 @@ pc = df[df["MM-DD"] >= df["MM-DD_actual"]].head(5)[["NOMBRE",
 def buscar_familiar(nombre):
     nombre = nombre.upper()
     temp_df = df[df["NOMBRE"].str.contains(nombre) == True]
-    temp_df = temp_df[["NOMBRE", "Nacimiento", "Edad", "FAMILIA.1"]]
+    temp_df = temp_df[["NOMBRE", "MM-DD", "Nacimiento", "Edad", "FAMILIA.1"]]
     temp_df = temp_df.reset_index(drop=True)
     return temp_df
 
