@@ -49,10 +49,10 @@ escudo = 'escudo.jpg'
 
 # estructura de la app
 st.title("Efemérides Familia Zambrano")
-st.image(escudo, use_column_width = False, width = 200)
+st.image(escudo, use_column_width = True)
 st.header("Próximos Cumpleaños:")
 AgGrid(pc)
-st.image(globos, use_column_width = False, width = 200)
+st.image(globos, use_column_width = True)
 st.header("Últimos Cumpleaños:")
 AgGrid(uc)
 st.header("Buscar Familiar:")
