@@ -25,12 +25,12 @@ df["MM-DD"] = df["Nacimiento"].dt.strftime('%m-%d')
 df["MM-DD_actual"] = df["Fecha_Actual"].dt.strftime('%m-%d')
 
 # generar tabla de últimos cumpleaños:
-uc = df[df["MM-DD"] < df["MM-DD_actual"]].tail(5)[["NOMBRE", 
+uc = df[df["MM-DD"] < df["MM-DD_actual"]].tail(10)[["NOMBRE", 
                                                    "Nacimiento", 
                                                    "Edad"]].reset_index(drop=True)[::-1]
 
 # generar tabla proximos cumpleaños:
-pc = df[df["MM-DD"] >= df["MM-DD_actual"]].head(5)[["NOMBRE", 
+pc = df[df["MM-DD"] >= df["MM-DD_actual"]].head(10)[["NOMBRE", 
                                                     "Nacimiento", 
                                                     "Edad"]].reset_index(drop=True)
 
