@@ -19,27 +19,27 @@ df["Nacimiento"] = df["month"] + "/" + df["day"] + "/" + df["year"]
 df["Nacimiento"] = pd.to_datetime(df["Nacimiento"])
 df["Fecha_Actual"] = str(fecha_actual)
 df["Fecha_Actual"] = pd.to_datetime(df["Fecha_Actual"])
-df["Edad"] = round((df["Fecha_Actual"] - df["Nacimiento"]) / np.timedelta64(1, 'Y'), 0)
-df["Edad"] = df["Edad"].astype(int)
+df["Cumple"] = round((df["Fecha_Actual"] - df["Nacimiento"]) / np.timedelta64(1, 'Y'), 0) 
+df["Cumple"] = df["Cumple"].astype(int)
 df["MM-DD"] = df["Nacimiento"].dt.strftime('%m-%d')
 df["MM-DD_actual"] = df["Fecha_Actual"].dt.strftime('%m-%d')
 
 # generar tabla de últimos cumpleaños:
 uc = df[df["MM-DD"] < df["MM-DD_actual"]].tail(10)[["NOMBRE", 
                                                    "Nacimiento", 
-                                                   "Edad"]].reset_index(drop=True)[::-1]
+                                                   "Cumple"]].reset_index(drop=True)[::-1]
 
 # generar tabla proximos cumpleaños:
 pc = df[df["MM-DD"] >= df["MM-DD_actual"]].head(10)[["NOMBRE", 
                                                     "Nacimiento", 
-                                                    "Edad"]].reset_index(drop=True)
+                                                    "Cumple"]].reset_index(drop=True)
 
 # Funciones:
 @st.cache
 def buscar_familiar(nombre):
     nombre = nombre.upper()
     temp_df = df[df["NOMBRE"].str.contains(nombre) == True]
-    temp_df = temp_df[["NOMBRE", "MM-DD", "Nacimiento", "Edad", "FAMILIA.1"]]
+    temp_df = temp_df[["NOMBRE", "MM-DD", "Nacimiento", "Cumple", "FAMILIA.1"]]
     temp_df = temp_df.reset_index(drop=True)
     return temp_df
 
