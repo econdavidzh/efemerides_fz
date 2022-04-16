@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 import datetime
+import math
 import streamlit as st
 from st_aggrid import AgGrid
 
@@ -19,27 +20,29 @@ df["Nacimiento"] = df["month"] + "/" + df["day"] + "/" + df["year"]
 df["Nacimiento"] = pd.to_datetime(df["Nacimiento"])
 df["Fecha_Actual"] = str(fecha_actual)
 df["Fecha_Actual"] = pd.to_datetime(df["Fecha_Actual"])
-df["Cumple"] = round((df["Fecha_Actual"] - df["Nacimiento"]) / np.timedelta64(1, 'Y'), 0) 
-df["Cumple"] = df["Cumple"].astype(int)
+df["Edad_float"] = (df["Fecha_Actual"] - df["Nacimiento"]) / np.timedelta64(1, 'Y')
+df["Edad"] = df['Edad_float'].apply(lambda x: math.floor(x))
+df["Edad"] = df["Edad"].astype(int)
 df["MM-DD"] = df["Nacimiento"].dt.strftime('%m-%d')
 df["MM-DD_actual"] = df["Fecha_Actual"].dt.strftime('%m-%d')
 
 # generar tabla de últimos cumpleaños:
 uc = df[df["MM-DD"] < df["MM-DD_actual"]].tail(10)[["NOMBRE", 
                                                    "Nacimiento", 
-                                                   "Cumple"]].reset_index(drop=True)[::-1]
+                                                   "Edad"]].reset_index(drop=True)[::-1]
 
 # generar tabla proximos cumpleaños:
 pc = df[df["MM-DD"] >= df["MM-DD_actual"]].head(10)[["NOMBRE", 
-                                                    "Nacimiento", 
-                                                    "Cumple"]].reset_index(drop=True)
+                                                       "Nacimiento", 
+                                                       "Edad"]].reset_index(drop=True)
+pc["Cumple"] = pc["Edad"] + 1
 
 # Funciones:
 @st.cache
 def buscar_familiar(nombre):
     nombre = nombre.upper()
     temp_df = df[df["NOMBRE"].str.contains(nombre) == True]
-    temp_df = temp_df[["NOMBRE", "MM-DD", "Nacimiento", "Cumple", "FAMILIA.1"]]
+    temp_df = temp_df[["NOMBRE", "MM-DD", "Nacimiento", "Edad", "FAMILIA.1"]]
     temp_df = temp_df.reset_index(drop=True)
     return temp_df
 
